@@ -18,5 +18,5 @@ python testdating.py
 * to generate a html report and run it from within html runner
 ```
 python testrunner.py
-```  
+```
 it'll generate a html report
