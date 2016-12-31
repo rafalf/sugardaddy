@@ -14,6 +14,8 @@ def get_driver():
         driver = webdriver.Firefox(firefox_binary=binary)
     elif browser == 'Chrome':
         driver = webdriver.Chrome(os.path.join(cwd, 'drivers', 'chromedriver.exe'))
+    elif browser == 'Chrome-OSX':
+        driver = webdriver.Chrome()
     elif browser == 'Ie':
         driver = webdriver.Ie(executable_path=os.path.join(cwd, 'drivers', 'IEDriverServer.exe'))
     elif browser == 'Safari':
