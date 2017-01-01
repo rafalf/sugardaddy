@@ -36,6 +36,12 @@ class Manage(Page, unittest.TestCase):
     def select_location(self):
         self.get_element_by_css('a[href="/manage/profile/edit_location/"]').click()
 
+    def select_bio(self):
+        self.get_element_by_css('a[href="/manage/profile/edit_bio/"]').click()
+
+    # ----------
+    # Basic Info
+
     def enter_name(self, name):
         el = self.get_element_by_css('#name')
         el.clear()
@@ -78,6 +84,9 @@ class Manage(Page, unittest.TestCase):
         select = Select(self.get_element_by_css(self.locators['income']))
         return select.first_selected_option.text
 
+    # ----------
+    # Location
+
     def select_country(self, value):
         select = Select(self.get_element_by_css(self.locators['country']))
         select.select_by_value(str(value))
@@ -110,3 +119,32 @@ class Manage(Page, unittest.TestCase):
     def get_bkk_area(self):
         select = Select(self.get_element_by_css(self.locators['bkk_area']))
         return select.first_selected_option.text
+
+    # ----------
+    # Bio
+
+    def select_lifestyle(self, value):
+        select = Select(self.get_element_by_css("#lifestyle_expectation"))
+        select.select_by_value(str(value))
+
+        selected = select.options[value ].text
+        return selected
+
+    def select_looking_for_men(self):
+        self.get_element_by_css('#looking_for_men').click()
+
+    # ----------
+    # My profile
+
+    def get_about_me(self):
+        return self.get_element_by_css('.profile-body p:nth-of-type(1)').text
+
+    def get_first_date_expectation(self):
+        return self.get_element_by_css('.profile-body p:nth-of-type(2)').text
+
+    def get_info(self):
+        info = []
+        els = WebDriverWait(self.driver, 5).until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, '.list-group-item a')))
+        for el in els:
+            info.append(el.text)
+        return info

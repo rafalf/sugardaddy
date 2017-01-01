@@ -25,6 +25,7 @@ from utils import browser
 from pages.home import Home
 from pages.manage import Manage
 from pages.login import Login
+from pages.messages import Messages
 
 
 class TestDating(unittest.TestCase):
@@ -91,7 +92,7 @@ class TestDating(unittest.TestCase):
 
         login.enter_email(self.conf['user_man'])
 
-        login.enter_password(self.conf['pass_man'])
+        login.enter_password(self.conf['pass'])
 
         login.select_submit()
 
@@ -132,12 +133,18 @@ class TestDating(unittest.TestCase):
 
         self.assertEqual(manage.get_headline, random_headline)
 
+        # verify on profile page
+        manage.select_profile()
+
+        profile_info = manage.get_info()
+
+        income_text = "Annual Iconme: {}".format(sel_income)
+        self.assertIn(income_text, profile_info)
+
+        networth_text = "Net Worth: {}".format(sel_net)
+        self.assertIn(networth_text, profile_info)
+
         manage.select_logout()
-
-        home = Home(self.driver, self.conf, self.locators)
-
-        # logged out - home page
-        home.wait_page_loaded()
 
     def test_3_location(self):
 
@@ -149,7 +156,7 @@ class TestDating(unittest.TestCase):
 
         login.enter_email(self.conf['user_man'])
 
-        login.enter_password(self.conf['pass_man'])
+        login.enter_password(self.conf['pass'])
 
         login.select_submit()
 
@@ -187,6 +194,127 @@ class TestDating(unittest.TestCase):
 
         self.assertEqual(sel_area, selected_area)
 
+    def test_4_bio(self):
+
+        login = Login(self.driver, self.conf, self.locators)
+
+        self.driver.get(self.conf.get('site_login_url'))
+
+        login.wait_page_loaded()
+
+        login.enter_email(self.conf['user_man'])
+
+        login.enter_password(self.conf['pass'])
+
+        login.select_submit()
+
+        manage = Manage(self.driver, self.conf, self.locators)
+
+        # logged in
+        manage.wait_for_nav_bar()
+
+        manage.select_profile()
+
+        manage.select_bio()
+
+        manage.select_looking_for_men()
+
+        random_lifestyle = manage.random_value
+        sel_lifestyle = manage.select_lifestyle(random_lifestyle)
+
+        manage.select_submit(True, True)
+
+        manage.select_profile()
+
+        profile_info = manage.get_info()
+
+        self.assertIn('Lifestyle: {}'.format(sel_lifestyle), profile_info)
+
+        self.assertIn('Age: 17 (Male)', profile_info)
+
+    def test_5_messages(self):
+
+        login = Login(self.driver, self.conf, self.locators)
+
+        self.driver.get(self.conf.get('site_login_url'))
+
+        login.wait_page_loaded()
+
+        login.enter_email(self.conf['user_man'])
+
+        login.enter_password(self.conf['pass'])
+
+        login.select_submit()
+
+        manage = Manage(self.driver, self.conf, self.locators)
+
+        # logged in
+        manage.wait_for_nav_bar()
+
+        manage.select_messages()
+
+        messages = Messages(self.driver, self.conf, self.locators)
+
+        messages.wait_page_loaded()
+
+        messages.select_user()
+
+        random_message_man = messages.random_word
+        messages.enter_message(random_message_man)
+
+        messages.select_submit(True)
+
+        messages.select_logout()
+
+        # woman receives message
+        self.driver.get(self.conf.get('site_login_url'))
+
+        login.wait_page_loaded()
+
+        login.enter_email(self.conf['user_woman'])
+
+        login.enter_password(self.conf['pass'])
+
+        login.select_submit()
+
+        manage.wait_for_nav_bar()
+
+        manage.select_messages()
+
+        messages.select_user()
+
+        messages_received = messages.get_all_messages()
+
+        self.assertIn(random_message_man, messages_received)
+
+        random_message_woman = messages.random_word
+        messages.enter_message(random_message_woman)
+
+        messages.select_submit(True)
+
+        messages.select_logout()
+
+        # man receives message
+        self.driver.get(self.conf.get('site_login_url'))
+
+        login.enter_email(self.conf['user_man'])
+
+        login.enter_password(self.conf['pass'])
+
+        login.select_submit()
+
+        manage.wait_for_nav_bar()
+
+        manage.select_messages()
+
+        messages.wait_page_loaded()
+
+        messages.select_user()
+
+        messages_received = messages.get_all_messages()
+
+        self.assertIn(random_message_woman, messages_received)
+
 
 if __name__ == "__main__":
 
@@ -194,5 +322,7 @@ if __name__ == "__main__":
     suite.addTest(TestDating("test_1_signup"))
     suite.addTest(TestDating("test_2_basic_info"))
     suite.addTest(TestDating("test_3_location"))
+    suite.addTest(TestDating("test_4_bio"))
+    suite.addTest(TestDating("test_5_messages"))
     runner = unittest.TextTestRunner()
     runner.run(suite)

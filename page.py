@@ -63,10 +63,12 @@ class Page(unittest.TestCase):
         except TimeoutException as e:
             self.fail(e)
 
-    def select_submit(self, alert=False):
+    def select_submit(self, alert_sucess=False, alert_info=False):
         self.get_element_by_css('[type="submit"]').click()
-        if alert:
+        if alert_sucess:
             self.wait_for_element_by_css('.alert-success')
+        if alert_info:
+            self.wait_for_element_by_css('.alert-info')
 
 
     # nav bar
@@ -78,8 +80,14 @@ class Page(unittest.TestCase):
     def select_profile(self):
         self.get_element_by_css('a[href^="/manage/profile/view"]').click()
 
+    def select_messages(self):
+        self.get_element_by_css('a[href="/manage/date/view/"]').click()
+
     def select_logout(self):
         self.get_element_by_css('a[href="/logout/"]').click()
+
+        selector_css= self.locators.get('signup_name')
+        self._wait_page_loaded(selector_css)
 
     # random
     # *******
