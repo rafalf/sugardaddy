@@ -63,8 +63,11 @@ class Page(unittest.TestCase):
         except TimeoutException as e:
             self.fail(e)
 
-    def select_submit(self):
+    def select_submit(self, alert=False):
         self.get_element_by_css('[type="submit"]').click()
+        if alert:
+            self.wait_for_element_by_css('.alert-success')
+
 
     # nav bar
     # *******

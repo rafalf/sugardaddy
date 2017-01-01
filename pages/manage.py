@@ -33,6 +33,9 @@ class Manage(Page, unittest.TestCase):
     def select_basic_info(self):
         self.get_element_by_css('a[href="/manage/profile/edit_basic_info/"]').click()
 
+    def select_location(self):
+        self.get_element_by_css('a[href="/manage/profile/edit_location/"]').click()
+
     def enter_name(self, name):
         el = self.get_element_by_css('#name')
         el.clear()
@@ -75,4 +78,35 @@ class Manage(Page, unittest.TestCase):
         select = Select(self.get_element_by_css(self.locators['income']))
         return select.first_selected_option.text
 
+    def select_country(self, value):
+        select = Select(self.get_element_by_css(self.locators['country']))
+        select.select_by_value(str(value))
 
+        selected = select.options[value - 1].text
+        return selected
+
+    def get_country(self):
+        select = Select(self.get_element_by_css(self.locators['country']))
+        return select.first_selected_option.text
+
+    def select_city(self, value):
+        select = Select(self.get_element_by_css(self.locators['city']))
+        select.select_by_value(str(value))
+
+        selected = select.options[value].text
+        return selected
+
+    def get_city(self):
+        select = Select(self.get_element_by_css(self.locators['city']))
+        return select.first_selected_option.text
+
+    def select_bkk_area(self, value):
+        select = Select(self.get_element_by_css(self.locators['bkk_area']))
+        select.select_by_value(str(value))
+
+        selected = select.options[value].text
+        return selected
+
+    def get_bkk_area(self):
+        select = Select(self.get_element_by_css(self.locators['bkk_area']))
+        return select.first_selected_option.text

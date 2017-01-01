@@ -2,3 +2,6 @@ signup_name::#name
 forget_pass::a[href='/forget_password']
 income::#annual_income
 net_worth::#net_worth
+country::#country
+city::#city
+bkk_area::#bangkok_area

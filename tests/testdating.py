@@ -116,7 +116,8 @@ class TestDating(unittest.TestCase):
         random_income = manage.random_value
         sel_income = manage.select_income(random_income)
 
-        manage.select_submit()
+        # Save
+        manage.select_submit(True)
 
         selected_net = manage.get_networth()
 
@@ -138,11 +139,53 @@ class TestDating(unittest.TestCase):
         # logged out - home page
         home.wait_page_loaded()
 
+    def test_3_location(self):
 
+        login = Login(self.driver, self.conf, self.locators)
 
+        self.driver.get(self.conf.get('site_login_url'))
 
+        login.wait_page_loaded()
 
+        login.enter_email(self.conf['user_man'])
 
+        login.enter_password(self.conf['pass_man'])
+
+        login.select_submit()
+
+        manage = Manage(self.driver, self.conf, self.locators)
+
+        # logged in
+        manage.wait_for_nav_bar()
+
+        manage.select_profile()
+
+        manage.select_location()
+
+        random_country = manage.random_value
+        sel_country = manage.select_country(random_country)
+
+        # BKK
+        manage.select_city(1)
+
+        random_area = manage.random_value
+        sel_area = manage.select_bkk_area(random_area)
+
+        # Save
+        manage.select_submit(True)
+
+        selected_country = manage.get_country()
+
+        selected_city = manage.get_city()
+
+        selected_area = manage.get_bkk_area()
+
+        # verify all values saved
+        self.assertEqual(sel_country, selected_country)
+
+        self.assertEqual('Bangkok', selected_city)
+
+        self.assertEqual(sel_area, selected_area)
 
 
 if __name__ == "__main__":
@@ -150,5 +193,6 @@ if __name__ == "__main__":
     suite = unittest.TestSuite()
     suite.addTest(TestDating("test_1_signup"))
     suite.addTest(TestDating("test_2_basic_info"))
+    suite.addTest(TestDating("test_3_location"))
     runner = unittest.TextTestRunner()
     runner.run(suite)
