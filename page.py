@@ -63,6 +63,9 @@ class Page(unittest.TestCase):
         except TimeoutException as e:
             self.fail(e)
 
+    def select_submit(self):
+        self.get_element_by_css('[type="submit"]').click()
+
     # nav bar
     # *******
 
@@ -75,6 +78,9 @@ class Page(unittest.TestCase):
     def select_logout(self):
         self.get_element_by_css('a[href="/logout/"]').click()
 
+    # random
+    # *******
+
     @property
     def random_word(self):
         return ''.join(random.choice(string.lowercase) for i in range(15))
@@ -82,3 +88,7 @@ class Page(unittest.TestCase):
     @property
     def random_number(self):
         return random.randint(1, 100)
+
+    @property
+    def random_value(self):
+        return random.randint(1, 5)

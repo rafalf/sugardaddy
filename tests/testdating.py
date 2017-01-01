@@ -24,6 +24,7 @@ from utils import browser
 
 from pages.home import Home
 from pages.manage import Manage
+from pages.login import Login
 
 
 class TestDating(unittest.TestCase):
@@ -41,7 +42,7 @@ class TestDating(unittest.TestCase):
     def tearDown(self):
         self.driver.quit()
 
-    def test_signup_1(self):
+    def test_1_signup(self):
 
         home = Home(self.driver, self.conf, self.locators)
 
@@ -80,10 +81,74 @@ class TestDating(unittest.TestCase):
         # logged out - home page
         home.wait_page_loaded()
 
+    def test_2_basic_info(self):
+
+        login = Login(self.driver, self.conf, self.locators)
+
+        self.driver.get(self.conf.get('site_login_url'))
+
+        login.wait_page_loaded()
+
+        login.enter_email(self.conf['user_man'])
+
+        login.enter_password(self.conf['pass_man'])
+
+        login.select_submit()
+
+        manage = Manage(self.driver, self.conf, self.locators)
+
+        # logged in
+        manage.wait_for_nav_bar()
+
+        manage.select_profile()
+
+        manage.select_basic_info()
+
+        random_name = manage.random_word
+        manage.enter_name(random_name)
+
+        random_headline = manage.random_word
+        manage.enter_headline(random_headline)
+
+        random_net = manage.random_value
+        sel_net = manage.select_networth(random_net)
+
+        random_income = manage.random_value
+        sel_income = manage.select_income(random_income)
+
+        manage.select_submit()
+
+        selected_net = manage.get_networth()
+
+        selected_income = manage.get_income()
+
+        # verify all values saved
+        self.assertEqual(selected_net, sel_net)
+
+        self.assertEqual(selected_income, sel_income)
+
+        self.assertEqual(manage.get_name, random_name)
+
+        self.assertEqual(manage.get_headline, random_headline)
+
+        manage.select_logout()
+
+        home = Home(self.driver, self.conf, self.locators)
+
+        # logged out - home page
+        home.wait_page_loaded()
+
+
+
+
+
+
+
 
 if __name__ == "__main__":
 
     suite = unittest.TestSuite()
-    suite.addTest(TestDating("test_signup_1"))
+    suite.addTest(TestDating("test_1_signup"))
+    suite.addTest(TestDating("test_2_basic_info"))
     runner = unittest.TextTestRunner()
     runner.run(suite)

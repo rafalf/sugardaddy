@@ -30,3 +30,49 @@ class Manage(Page, unittest.TestCase):
         self.conf = conf
         self.locators = locators
 
+    def select_basic_info(self):
+        self.get_element_by_css('a[href="/manage/profile/edit_basic_info/"]').click()
+
+    def enter_name(self, name):
+        el = self.get_element_by_css('#name')
+        el.clear()
+        el.send_keys(name)
+
+    @property
+    def get_name(self):
+        name = self.get_element_by_css('#name').get_attribute('value')
+        return name
+
+    def enter_headline(self, headline):
+        el = self.get_element_by_css('#headline')
+        el.clear()
+        el.send_keys(headline)
+
+    @property
+    def get_headline(self):
+        return self.get_element_by_css('#headline').get_attribute('value')
+
+    def select_networth(self, value):
+        select = Select(self.get_element_by_css(self.locators['net_worth']))
+        select.select_by_value(str(value))
+
+        selected = select.options[value].text
+        return selected
+
+    def get_networth(self):
+
+        select = Select(self.get_element_by_css(self.locators['net_worth']))
+        return select.first_selected_option.text
+
+    def select_income(self, value):
+        select = Select(self.get_element_by_css(self.locators['income']))
+        select.select_by_value(str(value))
+
+        selected = select.options[value].text
+        return selected
+
+    def get_income(self):
+        select = Select(self.get_element_by_css(self.locators['income']))
+        return select.first_selected_option.text
+
+
