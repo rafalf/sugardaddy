@@ -232,7 +232,69 @@ class TestDating(unittest.TestCase):
 
         self.assertIn('Age: 17 (Male)', profile_info)
 
-    def test_5_messages(self):
+    def test_5_personal_info(self):
+
+        login = Login(self.driver, self.conf, self.locators)
+
+        self.driver.get(self.conf.get('site_login_url'))
+
+        login.wait_page_loaded()
+
+        login.enter_email(self.conf['user_woman'])
+
+        login.enter_password(self.conf['pass'])
+
+        login.select_submit()
+
+        manage = Manage(self.driver, self.conf, self.locators)
+
+        # logged in
+        manage.wait_for_nav_bar()
+
+        manage.select_profile()
+
+        manage.select_personal_info()
+
+        random_height = manage.random_height_value
+        sel_height = manage.select_height(random_height)
+
+        random_body_type = manage.random_value
+        sel_body_type = manage.select_pers_info(random_body_type, 'body_type')
+
+        random_eye_color = manage.random_value
+        sel_eye_color = manage.select_pers_info(random_eye_color, 'eye_color')
+
+        random_hair_color = manage.random_value
+        sel_hair_color = manage.select_pers_info(random_hair_color, 'hair_color')
+
+        random_children = manage.random_value
+        sel_children = manage.select_pers_info(random_children, 'children')
+
+        random_ethnicity = manage.random_value
+        sel_ethnicity = manage.select_pers_info(random_ethnicity, 'ethnicity')
+
+        random_smoking_habit = manage.random_habit_value
+        sel_smoking_habit = manage.select_pers_info(random_smoking_habit, 'smoking_habit')
+
+        random_drinking_habit = manage.random_habit_value
+        sel_drinking_habit = manage.select_pers_info(random_drinking_habit, 'drinking_habit')
+
+        random_education = manage.random_value
+        sel_education = manage.select_pers_info(random_education, 'education')
+
+        random_relationship_status = manage.random_value
+        sel_relationship_status = manage.select_pers_info(random_relationship_status, 'relationship_status')
+
+        occupation = manage.random_word
+        manage.enter_occupation(occupation)
+
+        manage.select_submit(True, False)
+
+        manage.select_profile()
+
+        profile_info = manage.get_info()
+
+    def test_6_messages(self):
 
         login = Login(self.driver, self.conf, self.locators)
 
@@ -323,6 +385,7 @@ if __name__ == "__main__":
     suite.addTest(TestDating("test_2_basic_info"))
     suite.addTest(TestDating("test_3_location"))
     suite.addTest(TestDating("test_4_bio"))
-    suite.addTest(TestDating("test_5_messages"))
+    suite.addTest(TestDating("test_5_personal_info"))
+    suite.addTest(TestDating("test_6_messages"))
     runner = unittest.TextTestRunner()
     runner.run(suite)

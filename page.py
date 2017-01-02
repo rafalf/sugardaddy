@@ -103,3 +103,11 @@ class Page(unittest.TestCase):
     @property
     def random_value(self):
         return random.randint(1, 5)
+
+    @property
+    def random_habit_value(self):
+        return random.randint(1, 3)
+
+    @property
+    def random_height_value(self):
+        return random.randint(150, 155)

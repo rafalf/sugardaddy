@@ -39,6 +39,9 @@ class Manage(Page, unittest.TestCase):
     def select_bio(self):
         self.get_element_by_css('a[href="/manage/profile/edit_bio/"]').click()
 
+    def select_personal_info(self):
+        self.get_element_by_css('a[href$="/edit_personal_info/"]').click()
+
     # ----------
     # Basic Info
 
@@ -132,6 +135,38 @@ class Manage(Page, unittest.TestCase):
 
     def select_looking_for_men(self):
         self.get_element_by_css('#looking_for_men').click()
+
+    # ----------
+    # Personal info
+
+    def select_pers_info(self, value, select):
+
+        sl = {'body_type': '#body_type'}
+        sl['eye_color'] = '#eye_color'
+        sl['hair_color'] = '#hair_color'
+        sl['children'] = '#children'
+        sl['ethnicity'] = '#ethnicity'
+        sl['smoking_habit'] = '#smoking_habit'
+        sl['drinking_habit'] = '#drinking_habit'
+        sl['education'] = '#education'
+        sl['relationship_status'] = '#relationship_status'
+
+        select = Select(self.get_element_by_css(sl[select]))
+        select.select_by_value(str(value))
+
+        selected = select.options[value].text
+        return selected
+
+    def enter_occupation(self, email):
+        self.get_element_by_css('#occupation').send_keys(email)
+
+    def select_height(self, value):
+        select = Select(self.get_element_by_css('#height'))
+        select.select_by_value(str(value))
+
+        selected = select.first_selected_option.text
+        return selected
+
 
     # ----------
     # My profile
