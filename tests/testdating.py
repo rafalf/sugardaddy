@@ -294,6 +294,43 @@ class TestDating(unittest.TestCase):
 
         profile_info = manage.get_info()
 
+        self.assertIn('Age: 22 (Female)', profile_info)
+
+        self.assertIn('Height: {}'.format(sel_height), profile_info)
+
+        self.assertIn('Body Type: {}'.format(sel_body_type), profile_info)
+
+        self.assertIn('Eye Color: {}'.format(sel_eye_color), profile_info)
+
+        self.assertIn('Hair Color: {}'.format(sel_hair_color), profile_info)
+
+        self.assertIn('Ethnicity: {}'.format(sel_ethnicity), profile_info)
+
+        self.assertIn('Smoking Habit: {}'.format(sel_smoking_habit), profile_info)
+
+        self.assertIn('Drinking Habit: {}'.format(sel_drinking_habit), profile_info)
+
+        self.assertIn('Education: {}'.format(sel_education), profile_info)
+
+        # self.assertIn('Children: {}'.format(), profile_info)
+
+        # self.assertIn('Occupation: {}'.format(occupation), profile_info)
+
+        about_me = manage.get_about_me()
+
+        default_about_me = 'This member has not entered this information, ' \
+                           'message them and encourage them to complete their profile.'
+
+        self.assertEqual(about_me, default_about_me)
+
+        expectations = manage.get_first_date_expectation()
+
+        default_expectations = "This member has not entered this information, message them and encourage" \
+                               " them to complete their profile."
+
+        self.assertEqual(expectations, default_expectations)
+
+
     def test_6_messages(self):
 
         login = Login(self.driver, self.conf, self.locators)
@@ -381,11 +418,11 @@ class TestDating(unittest.TestCase):
 if __name__ == "__main__":
 
     suite = unittest.TestSuite()
-    suite.addTest(TestDating("test_1_signup"))
-    suite.addTest(TestDating("test_2_basic_info"))
-    suite.addTest(TestDating("test_3_location"))
-    suite.addTest(TestDating("test_4_bio"))
+    # suite.addTest(TestDating("test_1_signup"))
+    # suite.addTest(TestDating("test_2_basic_info"))
+    # suite.addTest(TestDating("test_3_location"))
+    # suite.addTest(TestDating("test_4_bio"))
     suite.addTest(TestDating("test_5_personal_info"))
-    suite.addTest(TestDating("test_6_messages"))
+    # suite.addTest(TestDating("test_6_messages"))
     runner = unittest.TextTestRunner()
     runner.run(suite)

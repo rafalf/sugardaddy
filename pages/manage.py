@@ -158,7 +158,9 @@ class Manage(Page, unittest.TestCase):
         return selected
 
     def enter_occupation(self, email):
-        self.get_element_by_css('#occupation').send_keys(email)
+        el = self.get_element_by_css('#occupation')
+        el.clear()
+        el.send_keys(email)
 
     def select_height(self, value):
         select = Select(self.get_element_by_css('#height'))
