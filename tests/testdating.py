@@ -418,11 +418,11 @@ class TestDating(unittest.TestCase):
 if __name__ == "__main__":
 
     suite = unittest.TestSuite()
-    # suite.addTest(TestDating("test_1_signup"))
-    # suite.addTest(TestDating("test_2_basic_info"))
-    # suite.addTest(TestDating("test_3_location"))
-    # suite.addTest(TestDating("test_4_bio"))
+    suite.addTest(TestDating("test_1_signup"))
+    suite.addTest(TestDating("test_2_basic_info"))
+    suite.addTest(TestDating("test_3_location"))
+    suite.addTest(TestDating("test_4_bio"))
     suite.addTest(TestDating("test_5_personal_info"))
-    # suite.addTest(TestDating("test_6_messages"))
+    suite.addTest(TestDating("test_6_messages"))
     runner = unittest.TextTestRunner()
     runner.run(suite)
