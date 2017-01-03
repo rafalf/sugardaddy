@@ -21,6 +21,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
 from page import Page
+import os
 
 
 class Manage(Page, unittest.TestCase):
@@ -41,6 +42,12 @@ class Manage(Page, unittest.TestCase):
 
     def select_personal_info(self):
         self.get_element_by_css('a[href$="/edit_personal_info/"]').click()
+
+    def select_settings(self):
+        self.get_element_by_css('a[href$="/manage/profile/settings"]').click()
+
+    def select_photos(self):
+        self.get_element_by_css('a[href$="/manage/profile/photo/"]').click()
 
     # ----------
     # Basic Info
@@ -86,6 +93,32 @@ class Manage(Page, unittest.TestCase):
     def get_income(self):
         select = Select(self.get_element_by_css(self.locators['income']))
         return select.first_selected_option.text
+
+    # ----------
+    # Photos
+
+    def enter_public_photo(self, photo_name):
+        photo_path = os.path.join(self._get_image_path(), photo_name)
+        el = self.get_element_by_css('.edit-panel .row:nth-of-type(1) #image')
+        el.send_keys(photo_path)
+
+    def select_upload_public_photos(self, success=True):
+        self.get_element_by_css('.edit-panel .row:nth-of-type(1) .btn-u').click()
+        if success:
+            self.wait_for_element_by_css('.alert-success')
+
+    def enter_private_photo(self, photo_name):
+        photo_path = os.path.join(self._get_image_path(), photo_name)
+        el = self.get_element_by_css('.edit-panel .row:nth-of-type(2) #image')
+        el.send_keys(photo_path)
+
+    def select_upload_private_photos(self,  success=True):
+        self.get_element_by_css('.edit-panel .row:nth-of-type(2) .btn-u').click()
+        if success:
+            self.wait_for_element_by_css('.alert-success')
+
+    def get_all_images_await_for_moderation(self):
+        return self.get_all_elements_by_css('.rgba-red')
 
     # ----------
     # Location
@@ -185,3 +218,6 @@ class Manage(Page, unittest.TestCase):
         for el in els:
             info.append(el.text)
         return info
+
+    def _get_image_path(self):
+        return os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')), 'images')

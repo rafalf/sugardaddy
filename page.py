@@ -55,6 +55,14 @@ class Page(unittest.TestCase):
         except TimeoutException as e:
             self.fail(e)
 
+    def get_all_elements_by_css(self, selector_css):
+
+        try:
+            return WebDriverWait(self.driver, 5).until(EC.presence_of_all_elements_located((
+                By.CSS_SELECTOR, selector_css)), 'element timed out: %s' % selector_css)
+        except TimeoutException as e:
+            self.fail(e)
+
     def wait_for_element_by_css(self, selector_css):
 
         try:

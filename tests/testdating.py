@@ -330,8 +330,32 @@ class TestDating(unittest.TestCase):
 
         self.assertEqual(expectations, default_expectations)
 
+    def test_6_settings(self):
 
-    def test_6_messages(self):
+        login = Login(self.driver, self.conf, self.locators)
+
+        self.driver.get(self.conf.get('site_login_url'))
+
+        login.wait_page_loaded()
+
+        login.enter_email(self.conf['user_woman'])
+
+        login.enter_password(self.conf['pass'])
+
+        login.select_submit()
+
+        manage = Manage(self.driver, self.conf, self.locators)
+
+        # logged in
+        manage.wait_for_nav_bar()
+
+        manage.select_profile()
+
+        manage.select_settings()
+
+        manage.select_submit(True, False)
+
+    def test_7_messages(self):
 
         login = Login(self.driver, self.conf, self.locators)
 
@@ -414,6 +438,56 @@ class TestDating(unittest.TestCase):
 
         self.assertIn(random_message_woman, messages_received)
 
+    def test_8_upload_images(self):
+
+        login = Login(self.driver, self.conf, self.locators)
+
+        for user in [self.conf['user_man'], self.conf['user_woman']]:
+
+            self.driver.get(self.conf.get('site_login_url'))
+
+            login.wait_page_loaded()
+
+            login.enter_email(user)
+
+            login.enter_password(self.conf['pass'])
+
+            login.select_submit()
+
+            manage = Manage(self.driver, self.conf, self.locators)
+
+            # logged in
+            manage.wait_for_nav_bar()
+
+            manage.select_profile()
+
+            manage.select_photos()
+
+            before = len(manage.get_all_images_await_for_moderation())
+
+            image_set1 = set(['jpg1.jpg', 'png1.png', 'bmp1.bmp'])
+
+            for image in image_set1:
+                manage.enter_public_photo(image)
+                manage.select_upload_public_photos()
+
+            image_set2 = set(['jpg2.jpg', 'png2.png', 'bmp2.bmp'])
+
+            for image in image_set2:
+                manage.enter_private_photo(image)
+                manage.select_upload_private_photos()
+
+            after_exp = before + 6
+            after_web = len(manage.get_all_images_await_for_moderation())
+
+            self.assertEqual(after_web, after_exp)
+
+            # error_img = "errorImg.pdf"
+            # manage.enter_private_photo(error_img)
+            # manage.select_upload_private_photos(False)
+
+            manage.select_logout()
+
 
 if __name__ == "__main__":
 
@@ -423,6 +497,8 @@ if __name__ == "__main__":
     suite.addTest(TestDating("test_3_location"))
     suite.addTest(TestDating("test_4_bio"))
     suite.addTest(TestDating("test_5_personal_info"))
-    suite.addTest(TestDating("test_6_messages"))
+    suite.addTest(TestDating("test_6_settings"))
+    suite.addTest(TestDating("test_7_messages"))
+    suite.addTest(TestDating("test_8_upload_images"))
     runner = unittest.TextTestRunner()
     runner.run(suite)
